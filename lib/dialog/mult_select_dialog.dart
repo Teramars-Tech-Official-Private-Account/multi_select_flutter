@@ -78,6 +78,8 @@ class MultiSelectDialog<T> extends StatefulWidget with MultiSelectActions<T> {
   /// Set the color of the check in the checkbox
   final Color? checkColor;
 
+  final Widget onEmptySearch;
+
   MultiSelectDialog({
     required this.items,
     required this.initialValue,
@@ -103,6 +105,7 @@ class MultiSelectDialog<T> extends StatefulWidget with MultiSelectActions<T> {
     this.selectedItemsTextStyle,
     this.separateSelectedItems = false,
     this.checkColor,
+    this.onEmptySearch,
   });
 
   @override
@@ -283,9 +286,12 @@ class _MultiSelectDialogState<T> extends State<MultiSelectDialog<T>> {
         width: widget.width ?? MediaQuery.of(context).size.width * 0.73,
         child: widget.listType == null ||
                 widget.listType == MultiSelectListType.LIST
-            ? ListView.builder(
+            ? _items.isEmpty?Center(
+              child: widget.onEmptySearch,
+            ): ListView.builder(
                 itemCount: _items.length,
                 itemBuilder: (context, index) {
+                  
                   return _buildListItem(_items[index]);
                 },
               )
