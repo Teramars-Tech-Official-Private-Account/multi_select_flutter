@@ -105,7 +105,7 @@ class MultiSelectDialog<T> extends StatefulWidget with MultiSelectActions<T> {
     this.selectedItemsTextStyle,
     this.separateSelectedItems = false,
     this.checkColor,
-    this.onEmptySearch,
+    required this.onEmptySearch,
   });
 
   @override
@@ -286,15 +286,16 @@ class _MultiSelectDialogState<T> extends State<MultiSelectDialog<T>> {
         width: widget.width ?? MediaQuery.of(context).size.width * 0.73,
         child: widget.listType == null ||
                 widget.listType == MultiSelectListType.LIST
-            ? _items.isEmpty?Center(
-              child: widget.onEmptySearch,
-            ): ListView.builder(
-                itemCount: _items.length,
-                itemBuilder: (context, index) {
-                  
-                  return _buildListItem(_items[index]);
-                },
-              )
+            ? _items.isEmpty
+                ? Center(
+                    child: widget.onEmptySearch,
+                  )
+                : ListView.builder(
+                    itemCount: _items.length,
+                    itemBuilder: (context, index) {
+                      return _buildListItem(_items[index]);
+                    },
+                  )
             : SingleChildScrollView(
                 child: Wrap(
                   children: _items.map(_buildChipItem).toList(),

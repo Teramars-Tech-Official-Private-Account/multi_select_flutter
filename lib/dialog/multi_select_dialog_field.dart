@@ -102,8 +102,10 @@ class MultiSelectDialogField<V> extends FormField<List<V>> {
   final FormFieldSetter<List<V>>? onSaved;
   final GlobalKey<FormFieldState>? key;
   FormFieldState<List<V>>? state;
+  final Widget onEmptySearch;
 
   MultiSelectDialogField({
+    required this.onEmptySearch,
     required this.items,
     required this.onConfirm,
     this.title,
@@ -146,6 +148,7 @@ class MultiSelectDialogField<V> extends FormField<List<V>> {
             builder: (FormFieldState<List<V>> state) {
               _MultiSelectDialogFieldView<V> field =
                   _MultiSelectDialogFieldView<V>(
+                onEmptySearch: onEmptySearch,
                 title: title,
                 items: items,
                 buttonText: buttonText,
@@ -212,6 +215,7 @@ class _MultiSelectDialogFieldView<V> extends StatefulWidget {
   final bool separateSelectedItems;
   final Color? checkColor;
   FormFieldState<List<V>>? state;
+  final Widget onEmptySearch;
 
   _MultiSelectDialogFieldView({
     required this.items,
@@ -243,12 +247,15 @@ class _MultiSelectDialogFieldView<V> extends StatefulWidget {
     this.selectedItemsTextStyle,
     this.separateSelectedItems = false,
     this.checkColor,
+    required this.onEmptySearch,
   });
 
   /// This constructor allows a FormFieldState to be passed in. Called by MultiSelectDialogField.
   _MultiSelectDialogFieldView._withState(
-      _MultiSelectDialogFieldView<V> field, FormFieldState<List<V>> state)
-      : items = field.items,
+    _MultiSelectDialogFieldView<V> field,
+    FormFieldState<List<V>> state,
+  )   : onEmptySearch = field.onEmptySearch,
+        items = field.items,
         title = field.title,
         buttonText = field.buttonText,
         buttonIcon = field.buttonIcon,
@@ -360,6 +367,7 @@ class __MultiSelectDialogFieldViewState<V>
       context: context,
       builder: (ctx) {
         return MultiSelectDialog<V>(
+          onEmptySearch: widget.onEmptySearch,
           checkColor: widget.checkColor,
           selectedItemsTextStyle: widget.selectedItemsTextStyle,
           searchHintStyle: widget.searchHintStyle,
